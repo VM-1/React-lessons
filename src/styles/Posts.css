@@ -1,0 +1,11 @@
+.page__wrapper {
+    margin-top: 40px;
+    display: flex;
+}
+.page__wrapper_btn {
+    margin-left: 10px;
+}
+.page__wrapper_btn.active {
+    border: none;
+    background-color: rgba(233, 213, 98, 0.6);
+}

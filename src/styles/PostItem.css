@@ -1,0 +1,13 @@
+.post {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top : 30px;
+}
+.post:first-child{
+    margin-top: 0;
+}
+.post__content  {
+    font-size: 20px;
+    margin-right: 20px;
+}
