@@ -1,16 +1,15 @@
-import React, { useState, useMemo, useEffect } from "react";
-import MyModal from "../components/UI/MyModal/MyModal";
-import PostList from "../components/PostList";
+import React, { useEffect, useState } from "react";
+import PostService from "../API/PostService";
 import PostFilter from "../components/PostFilter";
 import PostForm from "../components/PostForm";
+import PostList from "../components/PostList";
 import MyButton from "../components/UI/button/MyButton";
-import { usePosts } from "../hooks/usePost";
-import PostService from "../API/PostService";
 import Loader from "../components/UI/Loader/Loader.jsx";
-import { useFeatching } from "../hooks/useFatching";
-import { getPageCount, getPagesArray } from "../utils/page";
-import axios from "axios";
+import MyModal from "../components/UI/MyModal/MyModal";
+import { useFetching } from "../hooks/useFatching";
+import { usePosts } from "../hooks/usePost";
 import "../styles/Posts.css";
+import { getPageCount, getPagesArray } from "../utils/page";
 
 function Posts() {
   const [posts, setPosts] = useState([]);
@@ -22,9 +21,9 @@ function Posts() {
   const [page, setPage] = useState(1);
   let pagesArray = getPagesArray(totalPages);
 
-  const [fetchPosts, isPostLoiading, postError] = useFeatching(async () => {
+  const [fetchPosts, isPostLoiading, postError] = useFetching(async () => {
     const response = await PostService.getAll(postsLimit, page);
-    setPosts(response.data);
+    setPosts([...posts,...response.data]);
     const totalCount = response.headers["x-total-count"];
     setTotalPages(getPageCount(totalCount, postsLimit));
   });
@@ -54,11 +53,11 @@ function Posts() {
       </MyModal>
       <PostFilter filter={filter} setFilter={setFilter} />
       {postError && <h1>Прозошла ошибка {postError}</h1>}
-      {isPostLoiading ? (
+      {isPostLoiading &&
         <Loader />
-      ) : (
-        <PostList remove={removePost} posts={sortedAndSearchedPosts} />
-      )}
+      }
+      <PostList remove={removePost} posts={sortedAndSearchedPosts} />
+
       <div className="page__wrapper">
         {pagesArray.map((p) => (
           <MyButton
